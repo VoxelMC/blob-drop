@@ -6,7 +6,7 @@ function isAuthorizedCron(request: Request): boolean {
   if (request.headers.get('x-vercel-cron') === '1') {
     return true;
   }
-  const secret = process.env.CRON_SECRET;
+  const secret = import.meta.env.CRON_SECRET;
   if (!secret) return false;
   const auth = request.headers.get('authorization');
   return auth === `Bearer ${secret}`;

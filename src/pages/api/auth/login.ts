@@ -1,10 +1,10 @@
 import type { APIRoute } from 'astro';
-import { compare } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { createSessionToken, withSessionCookie } from '../../../lib/auth';
 
 export const POST: APIRoute = async ({ request }) => {
-  const username = process.env.ADMIN_USERNAME;
-  const hash = process.env.ADMIN_PASSWORD_HASH;
+  const username = import.meta.env.ADMIN_USERNAME;
+  const hash = import.meta.env.ADMIN_PASSWORD_HASH;
   if (!username || !hash) {
     return new Response(JSON.stringify({ error: 'Server misconfigured' }), {
       status: 500,
@@ -29,7 +29,12 @@ export const POST: APIRoute = async ({ request }) => {
   let okPass = false;
   if (okUser && p) {
     try {
-      okPass = await compare(p, hash);
+      okPass = await bcrypt.compare(p, hash);
+      console.log(okPass);
+      console.log(p, hash);
+      console.log(await bcrypt.hash(p, 12));
+      console.log("$2a$12" === hash);
+      console.log(await bcrypt.compare(p, hash));
     } catch {
       okPass = false;
     }

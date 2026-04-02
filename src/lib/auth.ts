@@ -5,7 +5,7 @@ export const SESSION_COOKIE = 'blob_drop_session';
 const SESSION_MAX_AGE_SEC = 60 * 60 * 24 * 7; // 7 days
 
 function getSessionSecret(): Uint8Array {
-  const s = process.env.SESSION_SECRET;
+  const s = import.meta.env.SESSION_SECRET;
   if (!s || s.length < 16) {
     throw new Error('SESSION_SECRET must be set (min 16 chars)');
   }
@@ -49,7 +49,7 @@ export async function isAuthenticatedRequest(request: Request): Promise<boolean>
 
 /** Append Set-Cookie for a new session */
 export function withSessionCookie(headers: Headers, token: string): void {
-  const secure = process.env.NODE_ENV === 'production';
+  const secure = import.meta.env.PROD;
   const parts = [
     `${SESSION_COOKIE}=${encodeURIComponent(token)}`,
     'HttpOnly',
@@ -62,7 +62,7 @@ export function withSessionCookie(headers: Headers, token: string): void {
 }
 
 export function withClearSessionCookie(headers: Headers): void {
-  const secure = process.env.NODE_ENV === 'production';
+  const secure = import.meta.env.PROD;
   const parts = [`${SESSION_COOKIE}=`, 'HttpOnly', 'Path=/', 'Max-Age=0', 'SameSite=Lax'];
   if (secure) parts.push('Secure');
   headers.append('Set-Cookie', parts.join('; '));
