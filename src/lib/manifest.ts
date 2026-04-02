@@ -10,7 +10,7 @@ const MANIFEST_KEY = 'manifest:files';
 
 export const MAX_FILES = 3;
 export const MAX_BYTES = 200 * 1024 * 1024;
-export const TTL_MS = 60 * 60 * 1000; // 1 hour
+export const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export type FileRecord = {
   id: string;

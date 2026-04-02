@@ -212,7 +212,7 @@ export default function DropZone() {
         <div>
           <h1 className="dz-title">Blob Drop!</h1>
           <p className="dz-sub">
-            Public downloads · up to {slots.max} files · 1 hour each · 200 MB max
+            Public downloads · up to {slots.max} files · 24 hours each · 200 MB max
           </p>
         </div>
         <div className="dz-auth">

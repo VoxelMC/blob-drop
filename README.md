@@ -1,6 +1,6 @@
 # Blob drop (Astro + Vercel Blob + Upstash Redis)
 
-Small glassmorphism dark UI: **public downloads**, **authenticated upload/delete**, at most **3 active files**, each kept for **1 hour** (cleanup via cron + Redis-backed manifest). Max **200 MB** per file using **client-side multipart** uploads to Vercel Blob.
+Small glassmorphism dark UI: **public downloads**, **authenticated upload/delete**, at most **3 active files**, each kept for **24 hours** (cleanup via cron + Redis-backed manifest). Max **200 MB** per file using **client-side multipart** uploads to Vercel Blob.
 
 ## Prerequisites
 
