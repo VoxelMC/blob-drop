@@ -207,7 +207,7 @@ export default function DropZone() {
     <div className="dz-root">
       <header className="dz-header glass">
         <div>
-          <h1 className="dz-title">Shared drop</h1>
+          <h1 className="dz-title">Blob Drop!</h1>
           <p className="dz-sub">
             Public downloads · up to {slots.max} files · 1 hour each · 200 MB max
           </p>
