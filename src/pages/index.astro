@@ -77,6 +77,27 @@ const title = import.meta.env.PUBLIC_APP_NAME ?? 'Blob Drop!';
         margin-bottom: 1.25rem;
       }
 
+      .dz-auth {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .dz-signin-panel {
+        animation: dz-panel-in 0.2s ease-out;
+      }
+
+      @keyframes dz-panel-in {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       .dz-title {
         margin: 0;
         font-size: 1.55rem;

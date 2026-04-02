@@ -65,6 +65,7 @@ export default function DropZone() {
   const [error, setError] = useState<string | null>(null);
   const [uploadPct, setUploadPct] = useState<number | null>(null);
   const [tick, setTick] = useState(() => Date.now());
+  const [signInOpen, setSignInOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const refresh = useCallback(async () => {
@@ -118,6 +119,7 @@ export default function DropZone() {
 
   const onLogout = async () => {
     setBusy(true);
+    setSignInOpen(false);
     try {
       await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
       await refresh();
@@ -133,6 +135,7 @@ export default function DropZone() {
       return;
     }
     if (!auth) {
+      setSignInOpen(true);
       setError('Sign in to upload');
       return;
     }
@@ -219,12 +222,22 @@ export default function DropZone() {
             <button type="button" className="dz-btn ghost" onClick={onLogout} disabled={busy}>
               Sign out
             </button>
-          ) : null}
+          ) : (
+            <button
+              type="button"
+              className="dz-btn ghost"
+              onClick={() => setSignInOpen((o) => !o)}
+              aria-expanded={signInOpen}
+              aria-controls="sign-in-panel"
+            >
+              {signInOpen ? 'Hide sign in' : 'Sign in'}
+            </button>
+          )}
         </div>
       </header>
 
-      {!loading && !auth ? (
-        <section className="glass dz-panel">
+      {!loading && !auth && signInOpen ? (
+        <section id="sign-in-panel" className="glass dz-panel dz-signin-panel">
           <h2 className="dz-h2">Sign in to upload or delete</h2>
           <form className="dz-form" onSubmit={onLogin}>
             <label className="dz-label">
