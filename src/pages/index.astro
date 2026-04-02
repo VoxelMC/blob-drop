@@ -1,0 +1,273 @@
+---
+import DropZone from '../components/DropZone';
+
+const title = import.meta.env.PUBLIC_APP_NAME ?? 'Blob drop';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Temporary file drop — public downloads, authenticated uploads" />
+    <title>{title}</title>
+    <link rel="icon" href="data:," />
+    <style is:global>
+      :root {
+        color-scheme: dark;
+        --bg0: #070a12;
+        --bg1: #12182a;
+        --glass: rgba(255, 255, 255, 0.06);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.55);
+        --accent: #6ee7ff;
+        --accent2: #a78bfa;
+        --danger: #fb7185;
+        --radius: 18px;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          Ubuntu,
+          Cantarell,
+          'Noto Sans',
+          sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        color: var(--text);
+        background:
+          radial-gradient(1200px 800px at 20% 0%, rgba(110, 231, 255, 0.12), transparent 55%),
+          radial-gradient(900px 600px at 100% 20%, rgba(167, 139, 250, 0.14), transparent 50%),
+          linear-gradient(165deg, var(--bg0), var(--bg1));
+      }
+
+      .glass {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-radius: var(--radius);
+        box-shadow:
+          0 12px 40px rgba(0, 0, 0, 0.35),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      .dz-root {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 3rem;
+      }
+
+      .dz-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.25rem 1.35rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .dz-title {
+        margin: 0;
+        font-size: 1.55rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        background: linear-gradient(120deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .dz-sub {
+        margin: 0.35rem 0 0;
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .dz-panel {
+        padding: 1.25rem 1.35rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .dz-h2 {
+        margin: 0 0 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .dz-form {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .dz-label {
+        display: grid;
+        gap: 0.35rem;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .dz-input {
+        padding: 0.65rem 0.75rem;
+        border-radius: 10px;
+        border: 1px solid var(--glass-border);
+        background: rgba(0, 0, 0, 0.25);
+        color: var(--text);
+        font-size: 1rem;
+      }
+
+      .dz-input:focus {
+        outline: 2px solid rgba(110, 231, 255, 0.35);
+        outline-offset: 0;
+      }
+
+      .dz-drop {
+        padding: 2rem 1.35rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+
+      .dz-drop.active {
+        border-color: rgba(110, 231, 255, 0.35);
+      }
+
+      .dz-drop.disabled {
+        opacity: 0.72;
+      }
+
+      .dz-drop-title {
+        margin: 0 0 0.35rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .dz-muted {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin: 0 0 1rem;
+        line-height: 1.45;
+      }
+
+      .dz-hidden-input {
+        display: none;
+      }
+
+      .dz-btn {
+        border-radius: 999px;
+        padding: 0.55rem 1.15rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition:
+          transform 0.12s ease,
+          opacity 0.15s,
+          background 0.15s,
+          border-color 0.15s;
+      }
+
+      .dz-btn:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+
+      .dz-btn.primary {
+        background: linear-gradient(120deg, rgba(110, 231, 255, 0.25), rgba(167, 139, 250, 0.3));
+        border-color: rgba(255, 255, 255, 0.18);
+        color: var(--text);
+      }
+
+      .dz-btn.primary:not(:disabled):hover {
+        transform: translateY(-1px);
+      }
+
+      .dz-btn.ghost {
+        background: transparent;
+        border-color: var(--glass-border);
+        color: var(--muted);
+      }
+
+      .dz-btn.danger {
+        color: var(--danger);
+        border-color: rgba(251, 113, 133, 0.45);
+      }
+
+      .dz-error {
+        color: var(--danger);
+        font-size: 0.9rem;
+        margin: 0 0 1rem;
+      }
+
+      .dz-progress {
+        margin: 0.75rem 0 0;
+        font-size: 0.9rem;
+        color: var(--accent);
+      }
+
+      .dz-list {
+        padding: 1.25rem 1.35rem;
+      }
+
+      .dz-ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .dz-li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.65rem 0.75rem;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .dz-li-main {
+        min-width: 0;
+        display: grid;
+        gap: 0.2rem;
+      }
+
+      .dz-link {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .dz-link:hover {
+        text-decoration: underline;
+      }
+
+      .dz-meta {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <DropZone client:load />
+  </body>
+</html>
