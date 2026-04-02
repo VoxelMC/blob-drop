@@ -43,7 +43,7 @@ npm run dev
 
 1. Push the repo and import the project in Vercel (or `vercel link`).
 2. Create/link **Blob**; connect **Upstash Redis** and add the env vars from `.env.example` (at minimum `KV_REST_API_URL` and `KV_REST_API_TOKEN` for uploads and the cron manifest).
-3. Deploy. Cron in [`vercel.json`](vercel.json) calls `GET /api/cron/cleanup` every 15 minutes to delete expired blobs and trim the manifest.
+3. Deploy. Cron in [`vercel.json`](vercel.json) calls `GET /api/cron/cleanup` once daily (00:00 UTC) to delete expired blobs and trim the manifest.
 
 ## User-facing behavior
 
