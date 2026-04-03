@@ -12,7 +12,7 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 
-  let body: { username?: string; password?: string };
+  let body: { username?: string; password?: string; };
   try {
     body = await request.json();
   } catch {
@@ -30,11 +30,6 @@ export const POST: APIRoute = async ({ request }) => {
   if (okUser && p) {
     try {
       okPass = await bcrypt.compare(p, hash);
-      console.log(okPass);
-      console.log(p, hash);
-      console.log(await bcrypt.hash(p, 12));
-      console.log("$2a$12" === hash);
-      console.log(await bcrypt.compare(p, hash));
     } catch {
       okPass = false;
     }

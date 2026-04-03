@@ -8,6 +8,7 @@ import {
   type FormEvent,
 } from 'react';
 import { upload } from '@vercel/blob/client';
+import { RiDownload2Line } from '@remixicon/react';
 
 const MAX_BYTES = 200 * 1024 * 1024;
 
@@ -106,7 +107,7 @@ export default function DropZone() {
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
-        throw new Error((j as { error?: string }).error ?? 'Login failed');
+        throw new Error((j as { error?: string; }).error ?? 'Login failed');
       }
       setPass('');
       await refresh();
@@ -193,7 +194,7 @@ export default function DropZone() {
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
-        throw new Error((j as { error?: string }).error ?? 'Delete failed');
+        throw new Error((j as { error?: string; }).error ?? 'Delete failed');
       }
       await refresh();
     } catch (err) {
@@ -324,6 +325,9 @@ export default function DropZone() {
                       {formatBytes(f.size)} · expires in {formatRemaining(ms)}
                     </span>
                   </div>
+                  {/* <div> */}
+                  <a className="dz-btn primary" href={`/api/files/download?url=${f.url}&filename=${f.originalName}`} target="_blank"><RiDownload2Line /></a>
+                  {/* </div> */}
                   {auth ? (
                     <button
                       type="button"
